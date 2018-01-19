@@ -73,8 +73,50 @@ bot.on("message", async message => {
         return message.channel.send("Changed my nickname.").then(msg => {msg.delete(3000)}).catch(console.error);
       }
          if(!message.member.roles.some(r=>["Owner", "Admin", "Developer", "Moderator"].includes(r.name)) ) {
+           message.channel.send("Je hebt geen permissies.").then(msg => {msg.delete(3000)}).catch(console.error);
            return;
          }
+    }
+
+    // Kick command
+    if(cmd === `${prefix}kick`){
+    if(!message.member.roles.some(r=>["Owner", "Admin", "Developer", "Moderator"].includes(r.name)) )
+      return message.reply("Je hebt geen permissies");
+
+    let member = message.mentions.members.first();
+    if(!member)
+      return message.reply("Kan de speler niet vinden");
+    if(!member.kickable)
+      return message.reply("Het is me niet gelukt hem te kicken");
+
+    let reason = args.slice(1).join(' ');
+    if(!reason)
+      return message.reply("Geef ook een reden.");
+
+    await member.kick(reason)
+      .catch(error => message.channel.send(`Sorry, Ik kon hem niet kicken omdat: ${error}`));
+    message.channel.send(`${member.user} is gekickt door ${message.author} voor: ${reason}`);
+
+    }
+
+    if(cmd === `${prefix}ban`){
+      if(!message.member.roles.some(r=>["Admin", "Owner", "Developer"].includes(r.name)) ){
+        return message.channel.send("Je hebt geen permissies");
+      }
+      let member = message.mentions.members.first();
+      if(!member){
+        return message.reply("Please mention a valid member of this server");
+      }
+      if(!member.bannable){
+        return message.channel.send("Kan de speler niet bannen");
+      }
+
+      let reason = args.slice(1).join(' ');
+      if(!reason){
+        return message.reply("Geef ook een reden.");
+      }
+      await member.ban(reason).catch(error => message.channel.send(`Ik kon hem niet bannen omdat: ${error}`));
+      message.channel.send(`${member.user} is geband door ${message.author} voor: ${reason}`);
     }
 
 
