@@ -1,0 +1,11 @@
+{
+  "name": "schaapiebot",
+  "version": "1.0.0",
+  "description": "De beste bot ooit voor discord.",
+  "main": "bot.js",
+  "author": "Mex",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^11.2.1"
+  }
+}
